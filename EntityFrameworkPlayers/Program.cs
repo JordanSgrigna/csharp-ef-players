@@ -25,8 +25,11 @@ while (userWantsToContinue)
 			Console.Write("Aggiungi il cognome del giocatore da aggiungere: ");
 			string playerSurnameChosen = Console.ReadLine();
 
+			Console.WriteLine("Inserisci l'id del team a cui appartiene il giocatore: ");
+			int teamId = int.Parse(Console.ReadLine());
+
 			// Creo il giocatore
-			Player newPlayer = new Player(playerNameChosen, playerSurnameChosen);
+			Player newPlayer = new Player(playerNameChosen, playerSurnameChosen, teamId);
 			// Apro il db
 			using (PlayerContext db = new PlayerContext())
 			{

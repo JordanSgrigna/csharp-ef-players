@@ -22,25 +22,28 @@ namespace EntityFrameworkPlayers
 		[Column("player_score")]
 		public int PlayerScore { get; set; }
 		[Column("player_number_of_games_played")]
-		public int NumberOfGamesPlayed { get; set; }
+		public int GamesPlayed { get; set; }
 		[Column("player_number_of_games_won")]
-		public int NumberOfGamesWon { get; set; }
+		public int GamesWon { get; set; }
+		public int TeamId { get; set; }
+		public Team Team { get; set; }
 
 		// CONSTRUCTOR
-		public Player(string playerName, string playerSurname)
+		public Player(string playerName, string playerSurname, int teamId)
 		{
 			Random rnd = new Random();
 			this.PlayerName = playerName;
 			this.PlayerSurname = playerSurname;
 			PlayerScore = rnd.Next(11);
-			NumberOfGamesPlayed = rnd.Next(1, 101);
-			NumberOfGamesWon = rnd.Next(1, NumberOfGamesPlayed + 1);
+			GamesPlayed = rnd.Next(1, 101);
+			GamesWon = rnd.Next(1, GamesPlayed + 1);
+			TeamId = teamId;
 		}
 
 		//METHODS
 		public override string ToString()
 		{
-			string infoString = "ID: " + PlayerId + ", Nome: " + PlayerName + ", Cognome: " + PlayerSurname + ", Score: " + PlayerScore + ", Partite Giocate: " + NumberOfGamesPlayed + ", Partite Vinte: " + NumberOfGamesWon;
+			string infoString = "ID: " + PlayerId + ", Nome: " + PlayerName + ", Cognome: " + PlayerSurname + ", Score: " + PlayerScore + ", Partite Giocate: " + GamesPlayed + ", Partite Vinte: " + GamesWon;
 			return infoString;
 		}
 
