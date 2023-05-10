@@ -7,9 +7,10 @@ while (userWantsToContinue)
 	Console.WriteLine("1. Inserisci un team");
 	Console.WriteLine("2. Inserisci un giocatore");
 	Console.WriteLine("3. Trova il giocatore per nome");
-	Console.WriteLine("4. Modifica il nome e/o cognome");
-	Console.WriteLine("5. Cancella un giocatore");
-	Console.WriteLine("6. Esci");
+	Console.WriteLine("4. Trova il giocatore per ID");
+	Console.WriteLine("5. Modifica il nome e cognome");
+	Console.WriteLine("6. Cancella un giocatore");
+	Console.WriteLine("7. Esci");
 
 	int userAnswer = int.Parse(Console.ReadLine());
 
@@ -37,6 +38,7 @@ while (userWantsToContinue)
 
 			Console.WriteLine(newPlayer.ToString());
 			break;
+
 		case 3:
 			Console.Write("Scrivi il nome dei giocatori che vuoi cercare: ");
 			string playerNameToSearch = Console.ReadLine();
@@ -45,11 +47,62 @@ while (userWantsToContinue)
 			{
 				List<Player> playersToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName.Contains(playerNameToSearch)).ToList<Player>();
 				foreach(Player playerScansionato in playersToFind)
+				{
+					Console.WriteLine(playerScansionato.ToString());
+				}
 			}
-				break;
-		case 4:
 			break;
+
+		case 4:
+			Console.Write("Scrivi l'id del giocatore che vuoi cercare: ");
+			int playerIdToSearch = int.Parse(Console.ReadLine());
+
+			using (PlayerContext db = new PlayerContext())
+			{
+				Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).First();
+				Console.WriteLine(playerToFindWithId.ToString());
+			}
+			break;
+
 		case 5:
+			Console.WriteLine("Scrivi l'id del giocatore di cui vuoi cambiare nome e cognome");
+			int playerIdToChange = int.Parse(Console.ReadLine());
+
+			using (PlayerContext db = new PlayerContext())
+			{
+				Player playerToUpdate = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToChange)).First();
+				Console.WriteLine(playerToUpdate.ToString());
+
+				Console.WriteLine("In cosa vuoi cambiare il suo nome? ");
+				string replacingName = Console.ReadLine();
+
+				playerToUpdate.PlayerName = replacingName;
+
+				Console.WriteLine("In cosa vuoi cambiare il suo cognome? ");
+				string replacingSurname = Console.ReadLine();
+
+				playerToUpdate.PlayerSurname = replacingSurname;
+
+				db.SaveChanges();
+			}
+			break;
+
+		case 6:
+			Console.Write("Scrivi l'id del giocatore che vuoi cancellare: ");
+			int playerIdToDelete = int.Parse(Console.ReadLine());
+
+			using (PlayerContext db = new PlayerContext())
+			{
+				Player playerToDelete = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToDelete)).First();
+
+				Console.WriteLine("Ok, hai rimosso il giocatore");
+				db.Player.Remove(playerToDelete);
+				db.SaveChanges();
+
+			}
+			break;
+
+		case 7:
 			Console.WriteLine("Ok, va bene, buonagiornata!");
 			userWantsToContinue = false;
 			break;
