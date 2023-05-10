@@ -37,6 +37,13 @@ namespace EntityFrameworkPlayers
 			NumberOfGamesWon = rnd.Next(1, NumberOfGamesPlayed + 1);
 		}
 
+		//METHODS
+		public override string ToString()
+		{
+			string infoString = "ID: " + PlayerId + ", Nome: " + PlayerName + ", Cognome: " + PlayerSurname + ", Score: " + PlayerScore + ", Partite Giocate: " + NumberOfGamesPlayed + ", Partite Vinte: " + NumberOfGamesWon;
+			return infoString;
+		}
+
 	}
 
 }
