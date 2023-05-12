@@ -37,7 +37,12 @@ namespace EntityFrameworkPlayers
 		//METHOD
 		public override string ToString()
 		{
-			string infoString = "Nome: " + Name + ", Città: " + City + ", Coach: " + Coach + ", Color" + Color;
+			string infoString = "Nome: " + Name + ", Città: " + City + ", Coach: " + Coach + ", Colori: " + Color;
+			Console.WriteLine("Questi sono i giocatori presenti nel team: ");
+			foreach(Player p in Players)
+			{
+				infoString += "\n" + p.ToString();
+			}
 			return infoString;
 		}
 	}

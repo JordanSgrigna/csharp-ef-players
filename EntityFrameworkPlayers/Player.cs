@@ -44,6 +44,10 @@ namespace EntityFrameworkPlayers
 		public override string ToString()
 		{
 			string infoString = "ID: " + PlayerId + ", Nome: " + PlayerName + ", Cognome: " + PlayerSurname + ", Score: " + PlayerScore + ", Partite Giocate: " + GamesPlayed + ", Partite Vinte: " + GamesWon;
+			if(Team != null)
+			{
+				infoString += "\nTeam: " + "\n" + Team.ToString();
+			}
 			return infoString;
 		}
 

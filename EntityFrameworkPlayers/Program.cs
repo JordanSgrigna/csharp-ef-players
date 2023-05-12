@@ -11,7 +11,8 @@ while (userWantsToContinue)
 	Console.WriteLine("4. Trova il giocatore per ID");
 	Console.WriteLine("5. Modifica il nome e cognome di un giocatore");
 	Console.WriteLine("6. Cancella un giocatore");
-	Console.WriteLine("7. Esci");
+	Console.WriteLine("7. Scopri i giocatori di un team");
+	Console.WriteLine("8. Esci");
 
 	int userAnswer = int.Parse(Console.ReadLine());
 
@@ -74,7 +75,7 @@ while (userWantsToContinue)
 			{
 				if (db.Player.Where(player => player.PlayerName == playerNameToSearch && player.PlayerSurname == playerSurnameToSearch).Any())
 				{
-					Player playerToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName == playerNameToSearch && playerScansionato.PlayerSurname == playerSurnameToSearch).First();
+					Player playerToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName == playerNameToSearch && playerScansionato.PlayerSurname == playerSurnameToSearch).Include(player => player.Team).First();
 					Console.WriteLine(playerToFind.ToString());
 				}
 				else
@@ -159,6 +160,23 @@ while (userWantsToContinue)
 			break;
 
 		case 7:
+			Console.WriteLine("Scrivi l'id del team di cui vuoi sapere i giocatori");
+			int teamIdToPrint = int.Parse(Console.ReadLine());
+
+			using (PlayerContext db = new PlayerContext())
+			{
+				if (db.Team.Where(team => team.TeamID == teamIdToPrint).Any())
+				{
+					Team teamToPrint = db.Team.Where(teamScan => teamScan.TeamID.Equals(teamIdToPrint)).First();
+					Console.WriteLine(teamToPrint.ToString());
+				}
+				else
+				{
+					Console.WriteLine("Non esiste un team con quell'ID");
+				}
+			}
+			break;
+		case 8:
 			Console.WriteLine("Ok, va bene, buonagiornata!");
 			userWantsToContinue = false;
 			break;
