@@ -11,6 +11,7 @@ namespace EntityFrameworkPlayers
 	{
 		// MODELS
 		public DbSet<Player> Player { get; set; }
+		public DbSet<Team> Team { get; set; }
 
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

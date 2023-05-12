@@ -10,6 +10,7 @@ namespace EntityFrameworkPlayers
 {
 	public class Team
 	{
+		//PROPERTIES
 		[Key]
 		public int TeamID { get; set; }
 		[Column("team_name")]
@@ -23,7 +24,7 @@ namespace EntityFrameworkPlayers
 
 		List<Player> Players { get; set; }
 
-
+		// CONSTRUCTOR
 		public Team(string name, string city, string coach, string color)
 		{
 			Name = name;
@@ -31,6 +32,13 @@ namespace EntityFrameworkPlayers
 			Coach = coach;
 			Color = color;
 			Players = new List<Player>();
+		}
+
+		//METHOD
+		public override string ToString()
+		{
+			string infoString = "Nome: " + Name + ", Città: " + City + ", Coach: " + Coach + ", Color" + Color;
+			return infoString;
 		}
 	}
 }

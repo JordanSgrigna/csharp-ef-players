@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkPlayers;
+using Microsoft.EntityFrameworkCore;
 
 bool userWantsToContinue = true;
 while (userWantsToContinue)
@@ -6,9 +7,9 @@ while (userWantsToContinue)
 	Console.WriteLine("Seleziona un'opzione: ");
 	Console.WriteLine("1. Inserisci un team");
 	Console.WriteLine("2. Inserisci un giocatore");
-	Console.WriteLine("3. Trova il giocatore per nome");
+	Console.WriteLine("3. Trova i giocatori per nome");
 	Console.WriteLine("4. Trova il giocatore per ID");
-	Console.WriteLine("5. Modifica il nome e cognome");
+	Console.WriteLine("5. Modifica il nome e cognome di un giocatore");
 	Console.WriteLine("6. Cancella un giocatore");
 	Console.WriteLine("7. Esci");
 
@@ -17,7 +18,27 @@ while (userWantsToContinue)
 	switch (userAnswer)
 	{
 		case 1:
+			Console.Write("Inserisci il nome del team da aggiungere: ");
+			string teamNameChosen = Console.ReadLine();
+
+			Console.Write("Inserisci la città di provenienza del team: ");
+			string teamCityChosen = Console.ReadLine();
+
+			Console.Write("Inserisci l'allenatore del team da aggiungere: ");
+			string teamCoachChosen = Console.ReadLine();
+
+			Console.Write("Inserisci il colore del team: ");
+			string teamColorChosen = Console.ReadLine();
+
+			Team newTeam = new Team(teamNameChosen, teamCityChosen, teamCoachChosen, teamColorChosen);
+
+			using (PlayerContext db = new PlayerContext())
+			{
+				db.Add(newTeam);
+				db.SaveChanges();
+			}
 			break;
+
 		case 2:
 			Console.Write("Aggiungi il nome del giocatore da aggiungere: ");
 			string playerNameChosen = Console.ReadLine();
@@ -25,7 +46,7 @@ while (userWantsToContinue)
 			Console.Write("Aggiungi il cognome del giocatore da aggiungere: ");
 			string playerSurnameChosen = Console.ReadLine();
 
-			Console.WriteLine("Inserisci l'id del team a cui appartiene il giocatore: ");
+			Console.Write("Inserisci l'id del team a cui appartiene il giocatore: ");
 			int teamId = int.Parse(Console.ReadLine());
 
 			// Creo il giocatore
@@ -62,7 +83,7 @@ while (userWantsToContinue)
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).First();
+				Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).Include(player => player.Team).First();
 				Console.WriteLine(playerToFindWithId.ToString());
 			}
 			break;
@@ -98,9 +119,10 @@ while (userWantsToContinue)
 			{
 				Player playerToDelete = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToDelete)).First();
 
-				Console.WriteLine("Ok, hai rimosso il giocatore");
 				db.Player.Remove(playerToDelete);
 				db.SaveChanges();
+				Console.WriteLine("Ok, hai rimosso il giocatore");
+
 
 			}
 			break;
