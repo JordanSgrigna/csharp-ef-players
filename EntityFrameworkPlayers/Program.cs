@@ -7,7 +7,7 @@ while (userWantsToContinue)
 	Console.WriteLine("Seleziona un'opzione: ");
 	Console.WriteLine("1. Inserisci un team");
 	Console.WriteLine("2. Inserisci un giocatore");
-	Console.WriteLine("3. Trova i giocatori per nome");
+	Console.WriteLine("3. Trova il giocatore per nome e cognome");
 	Console.WriteLine("4. Trova il giocatore per ID");
 	Console.WriteLine("5. Modifica il nome e cognome di un giocatore");
 	Console.WriteLine("6. Cancella un giocatore");
@@ -64,16 +64,16 @@ while (userWantsToContinue)
 			break;
 
 		case 3:
-			Console.Write("Scrivi il nome dei giocatori che vuoi cercare: ");
+			Console.Write("Scrivi il nome dei giocatore che vuoi cercare: ");
 			string playerNameToSearch = Console.ReadLine();
+
+			Console.Write("Scrivi il cognome del giocatore che vuoi cercare: ");
+			string playerSurnameToSearch = Console.ReadLine();
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				List<Player> playersToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName.Contains(playerNameToSearch)).ToList<Player>();
-				foreach(Player playerScansionato in playersToFind)
-				{
-					Console.WriteLine(playerScansionato.ToString());
-				}
+				Player playerToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName == playerNameToSearch && playerScansionato.PlayerSurname == playerSurnameToSearch).First();
+				Console.WriteLine(playerToFind.ToString());
 			}
 			break;
 
@@ -83,8 +83,17 @@ while (userWantsToContinue)
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).Include(player => player.Team).First();
-				Console.WriteLine(playerToFindWithId.ToString());
+				if (db.Player.Where(player => player.PlayerId == playerIdToSearch).Any())
+				{
+					Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).Include(player => player.Team).First();
+
+
+					Console.WriteLine(playerToFindWithId.ToString());
+				}
+				else
+				{
+					Console.WriteLine("Non esiste nessun giocatore con quell'ID");
+				}
 			}
 			break;
 
