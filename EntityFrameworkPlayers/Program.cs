@@ -50,18 +50,29 @@ while (userWantsToContinue)
 			Console.Write("Inserisci l'id del team a cui appartiene il giocatore: ");
 			int teamId = int.Parse(Console.ReadLine());
 
-			// Creo il giocatore
-			Player newPlayer = new Player(playerNameChosen, playerSurnameChosen, teamId);
+
+			
 			// Apro il db
 			using (PlayerContext db = new PlayerContext())
 			{
-				// Aggiungo il giocatore
-				db.Add(newPlayer);
-				// Salvo le modifiche fatte
-				db.SaveChanges();
-			}
+				if (db.Team.Where(team => team.TeamID == teamId).Any())
+				{
+					Player newPlayer = new Player(playerNameChosen, playerSurnameChosen, teamId);
+					Console.WriteLine(newPlayer.ToString());
+					// Aggiungo il giocatore al database
+					db.Add(newPlayer);
+					// Salvo le modifiche fatte
+					db.SaveChanges();
 
-			Console.WriteLine(newPlayer.ToString());
+					//CHIEDERE A BRYAN
+					//Team team = db.Team.Where(t => t.TeamID == teamId).First();
+					//team.AddPlayer(newPlayer);
+				}
+				else
+				{
+					Console.WriteLine("Mi dispiace ma il team non esiste. Riprova");
+				}
+			}
 			break;
 
 		case 3:

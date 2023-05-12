@@ -45,5 +45,10 @@ namespace EntityFrameworkPlayers
 			}
 			return infoString;
 		}
+
+		public void AddPlayer(Player player)
+		{
+			Players.Add(player);
+		}
 	}
 }
