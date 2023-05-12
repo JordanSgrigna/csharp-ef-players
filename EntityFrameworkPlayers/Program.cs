@@ -72,8 +72,16 @@ while (userWantsToContinue)
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				Player playerToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName == playerNameToSearch && playerScansionato.PlayerSurname == playerSurnameToSearch).First();
-				Console.WriteLine(playerToFind.ToString());
+				if (db.Player.Where(player => player.PlayerName == playerNameToSearch && player.PlayerSurname == playerSurnameToSearch).Any())
+				{
+					Player playerToFind = db.Player.Where(playerScansionato => playerScansionato.PlayerName == playerNameToSearch && playerScansionato.PlayerSurname == playerSurnameToSearch).First();
+					Console.WriteLine(playerToFind.ToString());
+				}
+				else
+				{
+					Console.WriteLine("Non esiste nessuno giocatore con quel nome e cognome!");
+				}
+
 			}
 			break;
 
@@ -87,7 +95,7 @@ while (userWantsToContinue)
 				{
 					Player playerToFindWithId = db.Player.Where(playerScans => playerScans.PlayerId.Equals(playerIdToSearch)).Include(player => player.Team).First();
 
-
+					Console.WriteLine("Ecco il giocatore richiesto: ");
 					Console.WriteLine(playerToFindWithId.ToString());
 				}
 				else
@@ -103,20 +111,27 @@ while (userWantsToContinue)
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				Player playerToUpdate = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToChange)).First();
-				Console.WriteLine(playerToUpdate.ToString());
+				if (db.Player.Where(player => player.PlayerId == playerIdToChange).Any())
+				{
+					Player playerToUpdate = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToChange)).First();
+					Console.WriteLine(playerToUpdate.ToString());
 
-				Console.WriteLine("In cosa vuoi cambiare il suo nome? ");
-				string replacingName = Console.ReadLine();
+					Console.WriteLine("In cosa vuoi cambiare il suo nome? ");
+					string replacingName = Console.ReadLine();
 
-				playerToUpdate.PlayerName = replacingName;
+					playerToUpdate.PlayerName = replacingName;
 
-				Console.WriteLine("In cosa vuoi cambiare il suo cognome? ");
-				string replacingSurname = Console.ReadLine();
+					Console.WriteLine("In cosa vuoi cambiare il suo cognome? ");
+					string replacingSurname = Console.ReadLine();
 
-				playerToUpdate.PlayerSurname = replacingSurname;
+					playerToUpdate.PlayerSurname = replacingSurname;
 
-				db.SaveChanges();
+					db.SaveChanges();
+				}
+				else
+				{
+					Console.WriteLine("Non esiste un giocatore con questo id");
+				}
 			}
 			break;
 
@@ -126,11 +141,18 @@ while (userWantsToContinue)
 
 			using (PlayerContext db = new PlayerContext())
 			{
-				Player playerToDelete = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToDelete)).First();
+				if (db.Player.Where(player => player.PlayerId == playerIdToDelete).Any())
+				{
+					Player playerToDelete = db.Player.Where(playerScan => playerScan.PlayerId.Equals(playerIdToDelete)).First();
 
-				db.Player.Remove(playerToDelete);
-				db.SaveChanges();
-				Console.WriteLine("Ok, hai rimosso il giocatore");
+					db.Player.Remove(playerToDelete);
+					db.SaveChanges();
+					Console.WriteLine("Ok, hai rimosso il giocatore");
+				}
+				else
+				{
+					Console.WriteLine("Non esistono giocatori con quell'ID");
+				}
 
 
 			}
